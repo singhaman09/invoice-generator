@@ -8,29 +8,29 @@ const InvoicePreview = forwardRef((props, ref) => {
   const invoice = useSelector((state) => state.invoice);
   const isRtl = i18n.language === "ar";
 
-  const generateQRData = () => {
-    const invoiceData = {
-      invoiceNo: invoice.invoiceNo,
-      invoiceDate: invoice.invoiceDate,
-      dueDate: invoice.dueDate,
-      billedBy: invoice.billedBy,
-      billedTo: invoice.billedTo,
-      items: invoice.items.map((item) => ({
-        name: item.name,
-        gst: parseFloat(item.gst) || 0,
-        qty: parseFloat(item.qty) || 0,
-        rate: parseFloat(item.rate) || 0,
-        total: (parseFloat(item.qty) || 0) * (parseFloat(item.rate) || 0) + (parseFloat(item.gst) || 0) / 100,
-      })),
-      totalAmount: invoice.items.reduce((sum, item) => {
-        const qty = parseFloat(item.qty) || 0;
-        const rate = parseFloat(item.rate) || 0;
-        const gst = parseFloat(item.gst) || 0;
-        return sum + qty * rate + gst / 100;
-      }, 0),
-    };
-    return `http://localhost:5173/`;
-  };
+  // const generateQRData = () => {
+  //   const invoiceData = {
+  //     invoiceNo: invoice.invoiceNo,
+  //     invoiceDate: invoice.invoiceDate,
+  //     dueDate: invoice.dueDate,
+  //     billedBy: invoice.billedBy,
+  //     billedTo: invoice.billedTo,
+  //     items: invoice.items.map((item) => ({
+  //       name: item.name,
+  //       gst: parseFloat(item.gst) || 0,
+  //       qty: parseFloat(item.qty) || 0,
+  //       rate: parseFloat(item.rate) || 0,
+  //       total: (parseFloat(item.qty) || 0) * (parseFloat(item.rate) || 0) + (parseFloat(item.gst) || 0) / 100,
+  //     })),
+  //     totalAmount: invoice.items.reduce((sum, item) => {
+  //       const qty = parseFloat(item.qty) || 0;
+  //       const rate = parseFloat(item.rate) || 0;
+  //       const gst = parseFloat(item.gst) || 0;
+  //       return sum + qty * rate + gst / 100;
+  //     }, 0),
+  //   };
+  //   return `http://localhost:5173/`;
+  // };
 
   const totalAmount = invoice.items.reduce((sum, item) => {
     const qty = parseFloat(item.qty) || 0;
@@ -95,16 +95,18 @@ const InvoicePreview = forwardRef((props, ref) => {
           })}
         </tbody>
       </table>
+      <br/>
       <p><strong>{t("total")}:</strong> ₹{totalAmount.toFixed(2)}</p>
-      <div style={{ marginTop: "1rem" }}>
+      { /* <div style={{ marginTop: "1rem" }}>
         <p><strong>{t("scanQR")}:</strong></p>
         <div style={{ display: "flex", flexDirection: "column", alignItems: isRtl ? "flex-end" : "center" }}>
-          <QRCode value={generateQRData()} size={128} style={{ marginTop: "0.5rem" }} level="H" includeMargin={true} />
-          <p style={{ fontSize: "0.75rem", marginTop: "0.5rem", maxWidth: "200px", textAlign: isRtl ? "right" : "center" }}>
-            {t("scanToView")}
+          { <QRCode value={generateQRData()} size={128} style={{ marginTop: "0.5rem" }} level="H" includeMargin={true} /> }
+           <p style={{ fontSize: "0.75rem", marginTop: "0.5rem", maxWidth: "200px", textAlign: isRtl ? "right" : "center" }}>
+            {t("scanToView")} 
           </p>
-        </div>
-      </div>
+        </div> 
+       </div> */}
+       <br/>
       {invoice.signature && (
         <div>
           <p>{t("authorizedSignature")}:</p>

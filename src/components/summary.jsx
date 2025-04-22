@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { uploadPDFToCloudinary } from "../utils/uploadToCloundinary";
 
 const InvoiceSummary = ({ onPreview }) => {
   const { t } = useTranslation();
@@ -15,23 +16,54 @@ const InvoiceSummary = ({ onPreview }) => {
     return sum + qty * rate + gst / 100;
   }, 0);
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     const input = document.getElementById("invoice-preview");
-    if (!input) return alert(t("invoicePreviewNotFound"));
+    if (!input) return alert("Invoice preview not found.");
 
-    html2canvas(input).then((canvas) => {
+    try {
+      const canvas = await html2canvas(input);
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({ orientation: "portrait", unit: "px", format: "a4" });
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: "a4",
+      });
+
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(t("invoicePdfName"));
-    }).catch((err) => {
-      console.error("Error generating PDF", err);
-      alert(t("pdfExportFailed"));
-    });
+
+      const pdfBlob = pdf.output("blob");
+      if (pdfBlob.size === 0) {
+        alert("Empty PDF generated. Skipping upload.");
+        return;
+      }
+      const cloudinaryUrl = await uploadPDFToCloudinary(pdfBlob);
+      if (!cloudinaryUrl) throw new Error("Cloudinary upload failed");
+
+      const invoiceData = {
+        id: Date.now(),
+        name: `Invoice_${invoice.invoiceNo}`,
+        url: cloudinaryUrl,
+        qrLink: cloudinaryUrl,
+        createdAt: new Date().toLocaleString(),
+      };
+
+      const existing = JSON.parse(localStorage.getItem("invoices")) || [];
+      localStorage.setItem(
+        "invoices",
+        JSON.stringify([...existing, invoiceData])
+      );
+
+      pdf.save(`Invoice_${invoice.invoiceNo}.pdf`);
+      alert("Invoice exported, uploaded, and saved!");
+    } catch (err) {
+      console.error("PDF export failed:", err);
+      alert("Something went wrong. Try again.");
+    }
   };
 
   return (
