@@ -5,11 +5,15 @@ A simple and elegant web application to create, preview, export, and store invoi
 ## 🚀 Features
 🔧 Dynamic Invoice Form — Enter client details, items, GST, etc.
 
+🔧 Firebase — For signup with google.
+
 👀 Live Invoice Preview — See how your invoice looks in real-time.
 
 📄 Export to PDF — Download professional invoices as PDF.
 
 ☁️ Cloud Storage — Upload PDF to Cloudinary and get a public link.
+
+☁️ Firebase Store — Used store to keep invoice details.
 
 📦 QR Code Generator — Scan and open the invoice instantly.
 
