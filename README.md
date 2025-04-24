@@ -16,9 +16,9 @@ A simple and elegant web application to create, preview, export, and store invoi
 🧠 LocalStorage Support — Store and list previous invoices.
 
 ## 📷 Demo
+![Screenshot from 2025-04-23 15-48-32](https://github.com/user-attachments/assets/1a823a5f-09a6-48c4-8c87-7a0cae72bbf6)
+![Screenshot from 2025-04-23 15-48-42](https://github.com/user-attachments/assets/a66785cb-1b84-4a61-89b9-1b3ddcf6a95b)
 
-![Invoice Form](<Screenshot from 2025-04-23 15-48-32.png>)
-![Invoice List](<Screenshot from 2025-04-23 15-48-42.png>)
 
 ## 🛠️ Tech Stack
 React.js – Front-end UI
