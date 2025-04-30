@@ -11,9 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
-firebase.js 
-uploadToCloundinary.js
+.env
 
 # Editor directories and files
 .vscode/*
